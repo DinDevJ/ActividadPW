@@ -352,6 +352,60 @@ section>p {
     line-height: 1.8;
 }
 
+/* Clases para los perfiles intercalados en Nosotros */
+.team-container {
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+    margin-top: 4rem;
+    max-width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.team-row {
+    display: flex;
+    align-items: center;
+    gap: 4rem;
+    text-align: left;
+}
+
+.team-row:nth-child(even) {
+    flex-direction: row-reverse;
+}
+
+.team-image {
+    flex: 0 0 30%; /* Solo ocupa el 30% del ancho */
+    max-width: 350px;
+}
+
+.team-image img {
+    width: 100%;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    object-fit: cover;
+    aspect-ratio: 4/3;
+}
+
+.team-info {
+    flex: 1; /* Ocupa todo el resto del espacio disponible (70%) */
+    padding: 1rem;
+}
+
+.team-info h3 {
+    font-size: 2.2rem;
+    color: var(--color-primary);
+    margin-bottom: 1rem;
+    font-family: 'Caveat', cursive; /* Toque humano/elegante */
+}
+
+.team-info p {
+    font-size: 1.15rem;
+    color: var(--text-muted);
+    line-height: 1.8;
+}
+
+
 .tech-stack {
     margin-top: 3rem;
 }
@@ -619,6 +673,15 @@ section>p {
 }
 
 @media (max-width: 768px) {
+    .team-row, .team-row:nth-child(even) {
+        flex-direction: column;
+        text-align: center;
+        gap: 2rem;
+    }
+    .team-image {
+        max-width: 100%;
+    }
+    
     .highlight-text {
         font-size: 3.5rem;
     }

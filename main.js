@@ -7,7 +7,7 @@ const links = [
     { texto: 'Inicio', url: '#' },
     { texto: 'Servicios', url: '#servicios' },
     { texto: 'Nosotros', url: '#nosotros' },
-    { texto: 'Portafolio', url: '#portafolio' },
+    { texto: 'Agregar Servicio', url: 'alta.html' },
     { texto: 'Contacto', url: '#contacto' }
 ];
 
@@ -70,10 +70,16 @@ heroButtons.classList.add('hero-buttons');
 const btnCotizar = document.createElement('button');
 btnCotizar.textContent = 'Cotizar proyecto';
 btnCotizar.classList.add('btn', 'btn-primary');
+btnCotizar.addEventListener('click', () => {
+    window.location.hash = '#contacto';
+});
 
 const btnPortafolio = document.createElement('button');
-btnPortafolio.textContent = 'Ver portafolio';
+btnPortafolio.textContent = 'Ver servicios';
 btnPortafolio.classList.add('btn', 'btn-secondary');
+btnPortafolio.addEventListener('click', () => {
+    window.location.hash = '#servicios';
+});
 
 heroButtons.appendChild(btnCotizar);
 heroButtons.appendChild(btnPortafolio);
@@ -84,211 +90,105 @@ heroContent.appendChild(heroButtons);
 
 const heroImageDiv = document.createElement('div');
 heroImageDiv.classList.add('hero-image');
-
 const heroImg = document.createElement('img');
-heroImg.src = 'images/mockup-gymsystem.png';
+heroImg.src = 'https://via.placeholder.com/600x400?text=Mockup+Sistema+Gimnasio';
 heroImg.alt = 'Mockup Sistema Gimnasio';
 heroImageDiv.appendChild(heroImg);
-
-const gymCaption = document.createElement('div');
-gymCaption.classList.add('gym-caption');
-
-const gymTitle = document.createElement('h3');
-gymTitle.textContent = 'Te presentamos GymSystem';
-
-const gymDesc = document.createElement('p');
-gymDesc.textContent = 'Nuestro software integral de gestión de gimnasios. Simplifica y automatiza el control de membresías, elevando la seguridad y modernizando las instalaciones con acceso biométrico avanzado.';
-
-const btnCotizarGym = document.createElement('a'); 
-btnCotizarGym.textContent = 'Cotizar GymSystem';
-btnCotizarGym.href = '#contacto'; 
-btnCotizarGym.classList.add('btn', 'btn-primary', 'btn-gym'); 
-
-gymCaption.appendChild(gymTitle);
-gymCaption.appendChild(gymDesc);
-gymCaption.appendChild(btnCotizarGym);
-heroImageDiv.appendChild(gymCaption);
-// ---------------------------------------------
 
 heroSection.appendChild(heroContent);
 heroSection.appendChild(heroImageDiv);
 root.appendChild(heroSection);
 
-// =========================================
-// CATÁLOGO: PRODUCTOS Y SERVICIOS
-// =========================================
-
-const catalogSection = document.createElement('section');
-catalogSection.id = 'servicios';
-catalogSection.classList.add('catalog-section');
-
-// Función reutilizable para crear carruseles
-function crearCarrusel(titulo, datos) {
-    // Título de la sección
-    const sectionTitle = document.createElement('h2');
-    sectionTitle.textContent = titulo;
-    catalogSection.appendChild(sectionTitle);
-
-    // Envoltura del carrusel
-    const wrapper = document.createElement('div');
-    wrapper.classList.add('carousel-wrapper');
-
-    // Botón Izquierdo
-    const btnLeft = document.createElement('button');
-    btnLeft.classList.add('carousel-btn', 'left');
-    btnLeft.innerHTML = '&#10094;'; // Entidad HTML para la flecha <
-
-    // Pista del carrusel (donde van las tarjetas)
-    const track = document.createElement('div');
-    track.classList.add('carousel-track');
-
-    // Botón Derecho
-    const btnRight = document.createElement('button');
-    btnRight.classList.add('carousel-btn', 'right');
-    btnRight.innerHTML = '&#10095;'; // Entidad HTML para la flecha >
-
-    // Lógica de los botones para hacer scroll
-    btnLeft.addEventListener('click', () => {
-        track.scrollBy({ left: -320, behavior: 'smooth' });
-    });
-    btnRight.addEventListener('click', () => {
-        track.scrollBy({ left: 320, behavior: 'smooth' });
-    });
-
-    // Bucle para inyectar las tarjetas
-    datos.forEach(item => {
-        const card = document.createElement('div');
-        card.classList.add('service-card');
-
-        // CONDICIONAL RÚBRICA: Diferenciar > $1000
-        if (item.price >= 15000) {
-            card.classList.add('premium');
-        }
-
-        const icon = document.createElement('img');
-        icon.src = item.icon;
-        icon.classList.add('service-icon');
-        card.appendChild(icon);
-
-        const priceContainer = document.createElement('div');
-        priceContainer.classList.add('service-price');
-        const formattedPrice = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(item.price);
-        
-        // Diferenciar visualmente si es pago mensual (SaaS) o pago único (Servicio)
-        if (item.isMonthly) {
-            priceContainer.innerHTML = `${formattedPrice} <span class="price-type">/ mes</span>`;
-        } else {
-            priceContainer.innerHTML = `+ ${formattedPrice} <span class="price-type">MXN</span>`;
-        }
-        card.appendChild(priceContainer);
-
-        if (item.price > 1000) {
-            const badge = document.createElement('span');
-            badge.classList.add('premium-badge');
-            badge.textContent = 'Destacado';
-            card.appendChild(badge);
-        }
-
-        const title = document.createElement('h3');
-        title.textContent = item.name;
-        card.appendChild(title);
-
-        const desc = document.createElement('p');
-        desc.textContent = item.description;
-        card.appendChild(desc);
-
-        track.appendChild(card);
-    });
-
-    wrapper.appendChild(btnLeft);
-    wrapper.appendChild(track);
-    wrapper.appendChild(btnRight);
-    catalogSection.appendChild(wrapper);
+// --- SECCION DE SERVICIOS ---
+let servicios = JSON.parse(localStorage.getItem('servicios'));
+if (!servicios || servicios.length === 0) {
+    servicios = [
+        { nombre: 'Página Web (HTML/CSS)', descripcion: 'Desarrollo de página web estática para portafolios o pequeños negocios.', precio: 1500, fotografia: 'https://via.placeholder.com/400x250/2563EB/FFFFFF?text=Html+Css' },
+        { nombre: 'Formateo de PC', descripcion: 'Instalación de Windows, drivers esenciales y paquetería de oficina.', precio: 300, fotografia: 'https://via.placeholder.com/400x250/00C4A7/FFFFFF?text=Formateo' },
+        { nombre: 'Mantenimiento de Laptop', descripcion: 'Limpieza interna, cambio de pasta térmica y revisión de ventiladores.', precio: 400, fotografia: 'https://via.placeholder.com/400x250/2563EB/FFFFFF?text=Laptop' },
+        { nombre: 'Instalación de Red Doméstica', descripcion: 'Mapeo, cableado y configuración de repetidores WiFi para extender señal.', precio: 600, fotografia: 'https://via.placeholder.com/400x250/F8BD24/111827?text=Redes' },
+        { nombre: 'Desarrollo de API Escolar', descripcion: 'Ayuda/asesoría en creación de APIs REST con Node.js para tareas.', precio: 1200, fotografia: 'https://via.placeholder.com/400x250/00C4A7/FFFFFF?text=API' },
+        { nombre: 'Recuperación de Archivos', descripcion: 'Extracción de documentos borrados o corrompidos de memorias USB.', precio: 500, fotografia: 'https://via.placeholder.com/400x250/2563EB/FFFFFF?text=Recuperacion' },
+        { nombre: 'Punto de Venta Básico', descripcion: 'Sistema de escritorio simple en Java para tiendas locales.', precio: 2500, fotografia: 'https://via.placeholder.com/400x250/F07167/FFFFFF?text=Punto+Venta' },
+        { nombre: 'Armado de PC Desktop', descripcion: 'Asesoría en compra de piezas y ensamblado completo paso a paso.', precio: 450, fotografia: 'https://via.placeholder.com/400x250/2563EB/FFFFFF?text=Armado+PC' },
+        { nombre: 'Limpieza de Malware', descripcion: 'Desinfección de virus del sistema operativo sin formatear.', precio: 250, fotografia: 'https://via.placeholder.com/400x250/00C4A7/FFFFFF?text=Antivirus' },
+        { nombre: 'Soporte Remoto', descripcion: 'Atención a distancia para solucionar problemas de Windows y aplicaciones.', precio: 150, fotografia: 'https://via.placeholder.com/400x250/111827/FFFFFF?text=Remoto' }
+    ];
+    localStorage.setItem('servicios', JSON.stringify(servicios));
 }
 
-// DATOS 1: Productos SaaS (Licencias / Mensualidades)
-const productosSaaS = [
-    {
-        name: 'GymSystem: Licencia de Gestión',
-        description: 'Control de membresías, pagos y acceso biométrico para gimnasios.',
-        price: 1500,
-        isMonthly: true,
-        icon: 'https://cdn.jsdelivr.net/npm/lucide-static@0.320.0/icons/dumbbell.svg'
-    },
-    {
-        name: 'Monarca: Logística y Monitoreo',
-        description: 'Generación de rutas y monitoreo de empleados para agencias de viaje.',
-        price: 2500,
-        isMonthly: true,
-        icon: 'https://cdn.jsdelivr.net/npm/lucide-static@0.320.0/icons/map.svg'
-    },
-    {
-        name: 'FerreApp: Punto de Venta',
-        description: 'Control de ventas para vendedores via AppMovil donde puedes rastrear los pedidos y generar notas.',
-        price: 1200,
-        isMonthly: true,
-        icon: 'https://cdn.jsdelivr.net/npm/lucide-static@0.320.0/icons/hammer.svg'
+const sectionServicios = document.createElement('section');
+sectionServicios.id = 'servicios';
+sectionServicios.classList.add('catalog-section'); // Según el nuevo CSS
+
+const serviciosTitle = document.createElement('h2');
+serviciosTitle.textContent = 'Catálogo de Servicios';
+
+const carouselWrapper = document.createElement('div');
+carouselWrapper.classList.add('carousel-wrapper');
+
+const btnLeft = document.createElement('button');
+btnLeft.classList.add('carousel-btn', 'left');
+btnLeft.innerHTML = '&#10094;';
+
+const carouselTrack = document.createElement('div');
+carouselTrack.classList.add('carousel-track');
+
+servicios.forEach((servicio) => {
+    const card = document.createElement('div');
+    card.classList.add('service-card');
+
+    if (servicio.precio > 1000) {
+        card.classList.add('premium');
     }
-];
 
-// DATOS 2: Servicios a Medida (Pagos por proyecto)
-const serviciosMedida = [
-    {
-        name: 'Desarrollo de Apps Móviles Nativas',
-        description: 'Creación de aplicaciones para iOS y Android.',
-        price: 20000,
-        isMonthly: false,
-        icon: 'https://cdn.jsdelivr.net/npm/lucide-static@0.320.0/icons/smartphone.svg'
-    },
-    {
-        name: 'Sistemas Web con Base de Datos',
-        description: 'Plataformas web completas usando React y PostgreSQL.',
-        price: 15000,
-        isMonthly: false,
-        icon: 'https://cdn.jsdelivr.net/npm/lucide-static@0.320.0/icons/database.svg'
-    },
-    {
-        name: 'Desarrollo Web Frontend',
-        description: 'Landing pages estáticas y optimizadas.',
-        price: 2500, 
-        isMonthly: false,
-        icon: 'https://cdn.jsdelivr.net/npm/lucide-static@0.320.0/icons/layout-template.svg'
-    },
-    {
-        name: 'Aplicaciones de Escritorio',
-        description: 'Software robusto para Windows y macOS.',
-        price: 2500,
-        isMonthly: false,
-        icon: 'https://cdn.jsdelivr.net/npm/lucide-static@0.320.0/icons/monitor.svg'
-    },
-    {
-        name: 'Sistemas IoT y Seguridad',
-        description: 'Hardware y software para monitoreo o control de accesos.',
-        price: 12000,
-        isMonthly: false,
-        icon: 'https://cdn.jsdelivr.net/npm/lucide-static@0.320.0/icons/cpu.svg'
-    },
-    {
-        name: 'Diseño de Interfaces (UI/UX)',
-        description: 'Prototipado e investigación de experiencia de usuario.',
-        price: 950, 
-        isMonthly: false,
-        icon: 'https://cdn.jsdelivr.net/npm/lucide-static@0.320.0/icons/pen-tool.svg'
-    },
-    {
-        name: 'Creación de APIs RESTful',
-        description: 'Microservicios seguros con FastAPI o Node.js.',
-        price: 1300,
-        isMonthly: false,
-        icon: 'https://cdn.jsdelivr.net/npm/lucide-static@0.320.0/icons/plug-2.svg'
-    }
-];
+    const img = document.createElement('img');
+    img.src = servicio.fotografia;
+    img.alt = servicio.nombre;
 
-// Ejecutamos la función para crear ambos carruseles (3 + 7 = 10 elementos en total)
-crearCarrusel('Nuestros Productos (SaaS)', productosSaaS);
-crearCarrusel('Desarrollo a Medida', serviciosMedida);
+    const catInfo = document.createElement('span');
+    catInfo.classList.add('service-category');
+    catInfo.textContent = 'Hardware / Web';
 
-root.appendChild(catalogSection); // Inyectar al DOM
+    const h3 = document.createElement('h3');
+    h3.textContent = servicio.nombre;
+
+    const p = document.createElement('p');
+    p.textContent = servicio.descripcion;
+
+    const priceBox = document.createElement('div');
+    priceBox.classList.add('price-box', 'service-price');
+    priceBox.textContent = `$${servicio.precio} MXN`;
+
+    card.appendChild(img);
+    card.appendChild(catInfo);
+    card.appendChild(h3);
+    card.appendChild(p);
+    card.appendChild(priceBox);
+
+    carouselTrack.appendChild(card);
+});
+
+const btnRight = document.createElement('button');
+btnRight.classList.add('carousel-btn', 'right');
+btnRight.innerHTML = '&#10095;';
+
+carouselWrapper.appendChild(btnLeft);
+carouselWrapper.appendChild(carouselTrack);
+carouselWrapper.appendChild(btnRight);
+
+sectionServicios.appendChild(serviciosTitle);
+sectionServicios.appendChild(carouselWrapper);
+
+// Lógica de desplazamiento simple para el carrusel
+btnLeft.addEventListener('click', () => {
+    carouselTrack.scrollBy({ left: -320, behavior: 'smooth' });
+});
+btnRight.addEventListener('click', () => {
+    carouselTrack.scrollBy({ left: 320, behavior: 'smooth' });
+});
+
+root.appendChild(sectionServicios);
 
 const sectionNosotros = document.createElement('section');
 sectionNosotros.id = 'nosotros';
@@ -303,78 +203,63 @@ aboutTitle.textContent = 'El factor humano detrás del código';
 const aboutDesc = document.createElement('p');
 aboutDesc.textContent = 'Nos enfocamos en entender tu negocio para crear soluciones tecnológicas reales, ágiles y funcionales.';
 
-const techStack = document.createElement('div');
-techStack.classList.add('tech-stack');
-const stackTitle = document.createElement('h4');
-stackTitle.textContent = 'Tecnologías que dominamos:';
-techStack.appendChild(stackTitle);
+const teamContainer = document.createElement('div');
+teamContainer.classList.add('team-container');
 
-const techData = [
-    { name: 'JavaScript', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg' },
-    { name: 'HTML5', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-original.svg' },
-    { name: 'CSS3', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/css3/css3-original.svg' },
-    { name: 'React', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg' },
-    { name: 'Tailwind CSS', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tailwindcss/tailwindcss-original.svg' },
-    { name: 'Python', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg' },
-    { name: 'PostgreSQL', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postgresql/postgresql-original.svg' },
-    { name: 'Git', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/git/git-original.svg' },
-    { name: 'Dart', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/dart/dart-original.svg' },
-    { name: 'Flutter', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/flutter/flutter-original.svg' },
-    { name: 'FastAPI', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/fastapi/fastapi-original.svg' },
-    { name: 'TypeScript', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/typescript/typescript-original.svg' },
-    { name: 'Node.js', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-original.svg' },
-];
+// Row Katia
+const rowKatia = document.createElement('div');
+rowKatia.classList.add('team-row');
 
-const techList = document.createElement('div');
-techList.classList.add('tech-list');
-// Estilos rápidos en línea para ordenar la lista principal
-techList.style.display = 'flex';
-techList.style.flexWrap = 'wrap';
-techList.style.gap = '25px';
-techList.style.marginTop = '15px';
+const imgKatiaDiv = document.createElement('div');
+imgKatiaDiv.classList.add('team-image');
+const imgKatia = document.createElement('img');
+imgKatia.src = 'https://via.placeholder.com/800x600/2563EB/FFFFFF?text=Katia+Aguilar';
+imgKatia.alt = 'Katia Aguilar Calderón';
+imgKatiaDiv.appendChild(imgKatia);
 
-techData.forEach(tech => {
-    // Contenedor individual para cada tecnología
-    const container = document.createElement('div');
-    container.classList.add('tech-item-container');
-    // Flexbox en columna para poner el texto arriba y la imagen abajito
-    container.style.display = 'flex';
-    container.style.flexDirection = 'column';
-    container.style.alignItems = 'center';
-    container.style.gap = '8px';
+const infoKatia = document.createElement('div');
+infoKatia.classList.add('team-info');
+const nameKatia = document.createElement('h3');
+nameKatia.textContent = 'Katia Aguilar Calderón';
+const descKatia = document.createElement('p');
+descKatia.textContent = 'Desarrolladora de software enfocada en la Ingeniería de Software, Frontend y Bases de Datos. Como responsable de la estructuración del trabajo, Katia asegura que cada proyecto se ejecute con precisión metodológica. A través de un trato directo e integral con el cliente, traduce requerimientos complejos en interfaces web creativas y arquitecturas de datos sólidas, garantizando plataformas intuitivas y altamente organizadas.';
+infoKatia.appendChild(nameKatia);
+infoKatia.appendChild(descKatia);
 
-    const span = document.createElement('span');
-    span.textContent = tech.name;
-    span.classList.add('tech-item');
-    span.style.fontWeight = '500';
+rowKatia.appendChild(imgKatiaDiv);
+rowKatia.appendChild(infoKatia);
 
-    const img = document.createElement('img');
-    img.src = tech.icon;
-    img.alt = `Logo de ${tech.name}`;
-    // Ajusta estos valores si quieres los logos más grandes o pequeños
-    img.style.width = '45px'; 
-    img.style.height = '45px';
+// Row Julio
+const rowJulio = document.createElement('div');
+rowJulio.classList.add('team-row');
 
-    container.appendChild(span);
-    container.appendChild(img); 
-    techList.appendChild(container);
-});
+const imgJulioDiv = document.createElement('div');
+imgJulioDiv.classList.add('team-image');
+const imgJulio = document.createElement('img');
+imgJulio.src = 'https://via.placeholder.com/800x600/00C4A7/FFFFFF?text=Julio+Araujo';
+imgJulio.alt = 'Julio César Araujo Hernández';
+imgJulioDiv.appendChild(imgJulio);
 
-techStack.appendChild(techList);
+const infoJulio = document.createElement('div');
+infoJulio.classList.add('team-info');
+const nameJulio = document.createElement('h3');
+nameJulio.textContent = 'Julio César Araujo Hernández';
+const descJulio = document.createElement('p');
+descJulio.textContent = 'Desarrollador Full-Stack y arquitecto principal del Backend y la integración Hardware-Software. Con un enfoque analítico y una fuerte vocación para el diseño de nuevas soluciones técnicas, Julio construye el núcleo lógico y operativo de cada sistema. Su especialidad es el manejo de infraestructura de servidores y la comunicación con dispositivos físicos, creando herramientas escalables, seguras y de alto rendimiento para operaciones complejas.';
+infoJulio.appendChild(nameJulio);
+infoJulio.appendChild(descJulio);
+
+rowJulio.appendChild(imgJulioDiv);
+rowJulio.appendChild(infoJulio);
+
+teamContainer.appendChild(rowKatia);
+teamContainer.appendChild(rowJulio);
 
 aboutContent.appendChild(aboutTitle);
 aboutContent.appendChild(aboutDesc);
-aboutContent.appendChild(techStack);
-
-const aboutImage = document.createElement('div');
-aboutImage.classList.add('about-image');
-const imgNosotros = document.createElement('img');
-imgNosotros.src = 'https://via.placeholder.com/500x500?text=Foto+Trabajando+Juntos';
-imgNosotros.alt = 'Nosotros trabajando juntos';
-aboutImage.appendChild(imgNosotros);
 
 sectionNosotros.appendChild(aboutContent);
-sectionNosotros.appendChild(aboutImage);
+sectionNosotros.appendChild(teamContainer);
 root.appendChild(sectionNosotros);
 
 const sectionUnete = document.createElement('section');
@@ -454,3 +339,4 @@ footerContainer.appendChild(footerText);
 
 footer.appendChild(footerContainer);
 root.appendChild(footer);
+
