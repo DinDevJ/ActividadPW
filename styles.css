@@ -840,9 +840,3 @@ section>p {
     line-height: 1.5;
     flex-grow: 1;
 }
-
-.service-card img {
-    height: 180px;
-    width: 180px;
-    margin: 20px;
-}

@@ -1,6 +1,9 @@
 const root = document.getElementById('root');
 root.innerHTML = '';
 
+// =========================================
+// NAVBAR
+// =========================================
 const navbar = document.createElement('nav');
 const menuList = document.createElement('ul');
 const links = [
@@ -33,8 +36,6 @@ divSwitch.appendChild(switchLabel);
 switchLabel.appendChild(switchInput);
 switchLabel.appendChild(switchSlider);
 
-
-
 links.forEach(item => {
     const li = document.createElement('li');
     const a = document.createElement('a');
@@ -51,6 +52,9 @@ navbar.appendChild(divSwitch);
 navbar.classList.add("navbar");
 root.appendChild(navbar);
 
+// =========================================
+// HERO SECTION
+// =========================================
 const heroSection = document.createElement('section');
 heroSection.id = 'hero';
 heroSection.classList.add('hero-section');
@@ -91,23 +95,67 @@ heroContent.appendChild(heroButtons);
 const heroImageDiv = document.createElement('div');
 heroImageDiv.classList.add('hero-image');
 const heroImg = document.createElement('img');
-heroImg.src = 'https://via.placeholder.com/600x400?text=Mockup+Sistema+Gimnasio';
+heroImg.src = 'images/mockup-gymsystem.png';
 heroImg.alt = 'Mockup Sistema Gimnasio';
 heroImageDiv.appendChild(heroImg);
+
+// --- Presentación GymSystem ---
+const gymCaption = document.createElement('div');
+gymCaption.classList.add('gym-caption');
+
+const gymTitle = document.createElement('h3');
+gymTitle.textContent = 'Te presentamos GymSystem';
+
+const gymDesc = document.createElement('p');
+gymDesc.textContent = 'Nuestro software integral de gestión de gimnasios. Simplifica y automatiza el control de membresías, elevando la seguridad y modernizando las instalaciones con acceso biométrico avanzado.';
+
+const btnCotizarGym = document.createElement('a');
+btnCotizarGym.textContent = 'Mas sobre GymSystem';
+btnCotizarGym.href = '#contacto';
+btnCotizarGym.classList.add('btn', 'btn-primary');
+btnCotizarGym.style.marginTop = '20px';
+btnCotizarGym.style.display = 'inline-block';
+
+gymCaption.appendChild(gymTitle);
+gymCaption.appendChild(gymDesc);
+gymCaption.appendChild(btnCotizarGym);
+
+heroImageDiv.appendChild(gymCaption);
 
 heroSection.appendChild(heroContent);
 heroSection.appendChild(heroImageDiv);
 root.appendChild(heroSection);
 
 // =========================================
-// CATÁLOGO: PRODUCTOS Y SERVICIOS (Estilo Mercado Libre)
+// DATOS DE CATÁLOGO
 // =========================================
+const productosSaaS = [
+    { name: 'GymSystem: Licencia de Gestión', description: 'Control de membresías, pagos y acceso biométrico para gimnasios.', price: 1500, isMonthly: true, icon: 'https://cdn.jsdelivr.net/npm/lucide-static@0.320.0/icons/dumbbell.svg' },
+    { name: 'Monarca: Logística y Monitoreo', description: 'Generación de rutas y monitoreo de empleados para agencias.', price: 2500, isMonthly: true, icon: 'https://cdn.jsdelivr.net/npm/lucide-static@0.320.0/icons/map.svg' },
+    { name: 'FerreApp: Punto de Venta', description: 'Control de inventario, ventas y facturación para ferreterías.', price: 1200, isMonthly: true, icon: 'https://cdn.jsdelivr.net/npm/lucide-static@0.320.0/icons/hammer.svg' }
+];
 
+let serviciosMedida = [
+    { name: 'Desarrollo de Apps Móviles Nativas', description: 'Creación de aplicaciones para iOS y Android.', price: 20000, isMonthly: false, icon: 'https://cdn.jsdelivr.net/npm/lucide-static@0.320.0/icons/smartphone.svg' },
+    { name: 'Sistemas Web con Base de Datos', description: 'Plataformas web completas escalables.', price: 15000, isMonthly: false, icon: 'https://cdn.jsdelivr.net/npm/lucide-static@0.320.0/icons/database.svg' },
+    { name: 'Desarrollo Web Frontend', description: 'Landing pages estáticas y optimizadas.', price: 2500, isMonthly: false, icon: 'https://cdn.jsdelivr.net/npm/lucide-static@0.320.0/icons/layout-template.svg' },
+    { name: 'Aplicaciones de Escritorio', description: 'Software robusto para Windows y macOS.', price: 5000, isMonthly: false, icon: 'https://cdn.jsdelivr.net/npm/lucide-static@0.320.0/icons/monitor.svg' },
+    { name: 'Sistemas IoT y Seguridad', description: 'Hardware y software para monitoreo o control de accesos.', price: 10000, isMonthly: false, icon: 'https://cdn.jsdelivr.net/npm/lucide-static@0.320.0/icons/cpu.svg' },
+    { name: 'Diseño de Interfaces (UI/UX)', description: 'Prototipado e investigación de experiencia de usuario.', price: 950, isMonthly: false, icon: 'https://cdn.jsdelivr.net/npm/lucide-static@0.320.0/icons/pen-tool.svg' },
+    { name: 'Creación de APIs RESTful', description: 'Microservicios seguros de alto rendimiento.', price: 1300, isMonthly: false, icon: 'https://cdn.jsdelivr.net/npm/lucide-static@0.320.0/icons/plug-2.svg' }
+];
+
+// Lógica de LocalStorage fusionada (Para los que agregues en alta.html)
+const serviciosGuardados = JSON.parse(localStorage.getItem('serviciosNuevos')) || [];
+serviciosMedida = [...serviciosMedida, ...serviciosGuardados];
+
+// =========================================
+// CATÁLOGO: PRODUCTOS Y SERVICIOS
+// =========================================
 const catalogSection = document.createElement('section');
 catalogSection.id = 'servicios';
 catalogSection.classList.add('catalog-section');
 
-// Función reutilizable para crear carruseles
 function crearCarrusel(titulo, datos) {
     const sectionTitle = document.createElement('h2');
     sectionTitle.textContent = titulo;
@@ -127,26 +175,19 @@ function crearCarrusel(titulo, datos) {
     btnRight.classList.add('carousel-btn', 'right');
     btnRight.innerHTML = '&#10095;';
 
-    btnLeft.addEventListener('click', () => {
-        track.scrollBy({ left: -320, behavior: 'smooth' });
-    });
-    btnRight.addEventListener('click', () => {
-        track.scrollBy({ left: 320, behavior: 'smooth' });
-    });
+    btnLeft.addEventListener('click', () => track.scrollBy({ left: -320, behavior: 'smooth' }));
+    btnRight.addEventListener('click', () => track.scrollBy({ left: 320, behavior: 'smooth' }));
 
     datos.forEach(item => {
         const card = document.createElement('div');
         card.classList.add('service-card');
 
-        // CONDICIONAL RÚBRICA: > $1000
-        if (item.price > 1000) {
-            card.classList.add('premium');
-        }
+        // CONDICIONAL RÚBRICA
+        if (item.price > 1000) card.classList.add('premium');
 
         const icon = document.createElement('img');
         icon.src = item.icon;
         icon.classList.add('service-icon');
-        // Pequeño fix inline para evitar que el CSS de Katia deforme los iconos SVG
         icon.style.width = '50px';
         icon.style.height = '50px';
         icon.style.margin = '0 0 20px 0';
@@ -164,7 +205,7 @@ function crearCarrusel(titulo, datos) {
         }
         card.appendChild(priceContainer);
 
-        if (item.price >= 15000) {
+        if (item.price >= 1000) {
             const badge = document.createElement('span');
             badge.classList.add('premium-badge');
             badge.textContent = 'Destacado';
@@ -179,6 +220,45 @@ function crearCarrusel(titulo, datos) {
         desc.textContent = item.description;
         card.appendChild(desc);
 
+        // --- BOTONES DE LLAMADO A LA ACCIÓN ---
+        const btnAction = document.createElement('a');
+        btnAction.style.marginTop = '20px';
+        btnAction.style.width = '100%';
+        btnAction.style.textAlign = 'center';
+        btnAction.style.padding = '10px 0';
+        btnAction.style.borderRadius = '6px';
+        btnAction.style.fontWeight = '600';
+        btnAction.style.fontSize = '0.95rem';
+        btnAction.style.display = 'block';
+        btnAction.style.textDecoration = 'none';
+        btnAction.style.transition = 'background-color 0.2s';
+
+        if (item.isMonthly) {
+            // Diseño SaaS (Mensualidad)
+            btnAction.textContent = 'Adquirir Licencia';
+            btnAction.style.backgroundColor = 'var(--color-primary)';
+            btnAction.style.color = '#ffffff';
+            btnAction.href = '#'; // Redirige a donde quieras después
+        } else {
+            // Diseño Desarrollo a Medida (Formulario)
+            btnAction.textContent = 'Cotizar Proyecto';
+            btnAction.style.backgroundColor = '#F3F4F6';
+            btnAction.style.color = 'var(--text-main)';
+            btnAction.href = '#contacto';
+
+            // Autoseleccionar en el formulario
+            btnAction.addEventListener('click', () => {
+                const selectServicio = document.getElementById('select-servicio');
+                if (selectServicio) {
+                    selectServicio.value = item.name;
+                }
+            });
+        }
+
+        btnAction.addEventListener('mouseenter', () => btnAction.style.opacity = '0.8');
+        btnAction.addEventListener('mouseleave', () => btnAction.style.opacity = '1');
+
+        card.appendChild(btnAction);
         track.appendChild(card);
     });
 
@@ -188,31 +268,13 @@ function crearCarrusel(titulo, datos) {
     catalogSection.appendChild(wrapper);
 }
 
-const productosSaaS = [
-    { name: 'GymSystem: Licencia de Gestión', description: 'Control de membresías, pagos y acceso biométrico para gimnasios.', price: 1500, isMonthly: true, icon: 'https://cdn.jsdelivr.net/npm/lucide-static@0.320.0/icons/dumbbell.svg' },
-    { name: 'Monarca: Logística y Monitoreo', description: 'Generación de rutas y monitoreo de empleados para agencias.', price: 2500, isMonthly: true, icon: 'https://cdn.jsdelivr.net/npm/lucide-static@0.320.0/icons/map.svg' },
-    { name: 'FerreApp: Punto de Venta', description: 'Control de inventario, ventas y facturación para ferreterías.', price: 1200, isMonthly: true, icon: 'https://cdn.jsdelivr.net/npm/lucide-static@0.320.0/icons/hammer.svg' }
-];
-
-let serviciosMedida = [
-    { name: 'Desarrollo de Apps Móviles Nativas', description: 'Creación de aplicaciones para iOS y Android.', price: 20000, isMonthly: false, icon: 'https://cdn.jsdelivr.net/npm/lucide-static@0.320.0/icons/smartphone.svg' },
-    { name: 'Sistemas Web con Base de Datos', description: 'Plataformas web completas escalables.', price: 15000, isMonthly: false, icon: 'https://cdn.jsdelivr.net/npm/lucide-static@0.320.0/icons/database.svg' },
-    { name: 'Desarrollo Web Frontend', description: 'Landing pages estáticas y optimizadas.', price: 2500, isMonthly: false, icon: 'https://cdn.jsdelivr.net/npm/lucide-static@0.320.0/icons/layout-template.svg' },
-    { name: 'Aplicaciones de Escritorio', description: 'Software robusto para Windows y macOS.', price: 5000, isMonthly: false, icon: 'https://cdn.jsdelivr.net/npm/lucide-static@0.320.0/icons/monitor.svg' },
-    { name: 'Sistemas IoT y Seguridad', description: 'Hardware y software para monitoreo o control de accesos.', price: 10000, isMonthly: false, icon: 'https://cdn.jsdelivr.net/npm/lucide-static@0.320.0/icons/cpu.svg' },
-    { name: 'Diseño de Interfaces (UI/UX)', description: 'Prototipado e investigación de experiencia de usuario.', price: 950, isMonthly: false, icon: 'https://cdn.jsdelivr.net/npm/lucide-static@0.320.0/icons/pen-tool.svg' },
-    { name: 'Creación de APIs RESTful', description: 'Microservicios seguros de alto rendimiento.', price: 1300, isMonthly: false, icon: 'https://cdn.jsdelivr.net/npm/lucide-static@0.320.0/icons/plug-2.svg' }
-];
-
-// Lógica de LocalStorage fusionada (Para que los que agregues en alta.html aparezcan aquí)
-const serviciosGuardados = JSON.parse(localStorage.getItem('serviciosNuevos')) || [];
-serviciosMedida = [...serviciosMedida, ...serviciosGuardados];
-
 crearCarrusel('Nuestros Productos (SaaS)', productosSaaS);
 crearCarrusel('Desarrollo a Medida', serviciosMedida);
-
 root.appendChild(catalogSection);
 
+// =========================================
+// NOSOTROS Y TECNOLOGÍAS
+// =========================================
 const sectionNosotros = document.createElement('section');
 sectionNosotros.id = 'nosotros';
 sectionNosotros.classList.add('about-section');
@@ -232,14 +294,12 @@ teamContainer.classList.add('team-container');
 // Row Katia
 const rowKatia = document.createElement('div');
 rowKatia.classList.add('team-row');
-
 const imgKatiaDiv = document.createElement('div');
 imgKatiaDiv.classList.add('team-image');
 const imgKatia = document.createElement('img');
 imgKatia.src = 'https://via.placeholder.com/800x600/2563EB/FFFFFF?text=Katia+Aguilar';
 imgKatia.alt = 'Katia Aguilar Calderón';
 imgKatiaDiv.appendChild(imgKatia);
-
 const infoKatia = document.createElement('div');
 infoKatia.classList.add('team-info');
 const nameKatia = document.createElement('h3');
@@ -248,21 +308,18 @@ const descKatia = document.createElement('p');
 descKatia.textContent = 'Desarrolladora de software enfocada en la Ingeniería de Software, Frontend y Bases de Datos. Como responsable de la estructuración del trabajo, Katia asegura que cada proyecto se ejecute con precisión metodológica. A través de un trato directo e integral con el cliente, traduce requerimientos complejos en interfaces web creativas y arquitecturas de datos sólidas, garantizando plataformas intuitivas y altamente organizadas.';
 infoKatia.appendChild(nameKatia);
 infoKatia.appendChild(descKatia);
-
 rowKatia.appendChild(imgKatiaDiv);
 rowKatia.appendChild(infoKatia);
 
 // Row Julio
 const rowJulio = document.createElement('div');
 rowJulio.classList.add('team-row');
-
 const imgJulioDiv = document.createElement('div');
 imgJulioDiv.classList.add('team-image');
 const imgJulio = document.createElement('img');
 imgJulio.src = 'https://via.placeholder.com/800x600/00C4A7/FFFFFF?text=Julio+Araujo';
 imgJulio.alt = 'Julio César Araujo Hernández';
 imgJulioDiv.appendChild(imgJulio);
-
 const infoJulio = document.createElement('div');
 infoJulio.classList.add('team-info');
 const nameJulio = document.createElement('h3');
@@ -271,19 +328,17 @@ const descJulio = document.createElement('p');
 descJulio.textContent = 'Desarrollador Full-Stack y arquitecto principal del Backend y la integración Hardware-Software. Con un enfoque analítico y una fuerte vocación para el diseño de nuevas soluciones técnicas, Julio construye el núcleo lógico y operativo de cada sistema. Su especialidad es el manejo de infraestructura de servidores y la comunicación con dispositivos físicos, creando herramientas escalables, seguras y de alto rendimiento para operaciones complejas.';
 infoJulio.appendChild(nameJulio);
 infoJulio.appendChild(descJulio);
-
 rowJulio.appendChild(imgJulioDiv);
 rowJulio.appendChild(infoJulio);
 
 teamContainer.appendChild(rowKatia);
 teamContainer.appendChild(rowJulio);
-
 aboutContent.appendChild(aboutTitle);
 aboutContent.appendChild(aboutDesc);
-
 sectionNosotros.appendChild(aboutContent);
 sectionNosotros.appendChild(teamContainer);
-// --- TECNOLOGÍAS QUE DOMINAMOS ---
+
+// Tecnologías que dominamos
 const techStack = document.createElement('div');
 techStack.classList.add('tech-stack');
 techStack.style.marginTop = '4rem';
@@ -342,12 +397,12 @@ techData.forEach(tech => {
 });
 
 techStack.appendChild(techList);
-// Agregamos techStack al contenedor de Nosotros
 aboutContent.appendChild(techStack);
 root.appendChild(sectionNosotros);
 
-
-
+// =========================================
+// ÚNETE SECTION
+// =========================================
 const sectionUnete = document.createElement('section');
 sectionUnete.id = 'unete';
 sectionUnete.classList.add('unete-section');
@@ -383,9 +438,11 @@ uneteTitle.innerHTML = 'Únete a los clientes que hacen crecer su negocio con <b
 
 uneteContent.appendChild(uneteTitle);
 sectionUnete.appendChild(uneteContent);
-
 root.appendChild(sectionUnete);
 
+// =========================================
+// CONTACTO SECTION (CON MENÚ DESPLEGABLE)
+// =========================================
 const sectionContacto = document.createElement('section');
 sectionContacto.id = 'contacto';
 sectionContacto.classList.add('contact-section');
@@ -396,7 +453,21 @@ sectionContacto.appendChild(contactTitle);
 
 const contactForm = document.createElement('form');
 contactForm.classList.add('contact-form');
+
+// Generar las opciones del select dinámicamente
+let opcionesSelect = `<option value="">Selecciona un servicio a cotizar...</option>`;
+opcionesSelect += `<option value="Dudas Generales">Dudas generales / Otro proyecto</option>`;
+
+serviciosMedida.forEach(servicio => {
+    opcionesSelect += `<option value="${servicio.name}">${servicio.name}</option>`;
+});
+
 contactForm.innerHTML = `
+    <div class="form-group">
+        <select id="select-servicio" required style="width: 100%; padding: 1.2rem; border: 1px solid #D1D5DB; border-radius: 8px; font-size: 1.05rem; font-family: 'Inter', sans-serif; color: var(--text-main); background-color: #F9FAFB; appearance: none; cursor: pointer;">
+            ${opcionesSelect}
+        </select>
+    </div>
     <div class="form-group">
         <input type="text" placeholder="Tu Nombre o el de tu Empresa" required />
     </div>
@@ -404,15 +475,23 @@ contactForm.innerHTML = `
         <input type="email" placeholder="Tu Correo Electrónico" required />
     </div>
     <div class="form-group">
-        <textarea placeholder="Cuéntanos un poco de qué trata tu proyecto..." rows="4" required></textarea>
+        <textarea placeholder="Cuéntanos un poco de los requerimientos de tu proyecto..." rows="4" required></textarea>
     </div>
-    <button type="submit" class="btn btn-primary">Enviar Mensaje</button>
+    <button type="submit" class="btn btn-primary" style="width: 100%;">Enviar Solicitud</button>
 `;
-contactForm.addEventListener('submit', (e) => e.preventDefault());
+
+contactForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    alert('¡Mensaje enviado con éxito! Nos pondremos en contacto pronto.');
+    contactForm.reset();
+});
 
 sectionContacto.appendChild(contactForm);
 root.appendChild(sectionContacto);
 
+// =========================================
+// FOOTER
+// =========================================
 const footer = document.createElement('footer');
 footer.classList.add('footer');
 
@@ -425,4 +504,3 @@ footerContainer.appendChild(footerText);
 
 footer.appendChild(footerContainer);
 root.appendChild(footer);
-
