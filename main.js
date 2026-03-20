@@ -84,14 +84,211 @@ heroContent.appendChild(heroButtons);
 
 const heroImageDiv = document.createElement('div');
 heroImageDiv.classList.add('hero-image');
+
 const heroImg = document.createElement('img');
-heroImg.src = 'https://via.placeholder.com/600x400?text=Mockup+Sistema+Gimnasio';
+heroImg.src = 'images/mockup-gymsystem.png';
 heroImg.alt = 'Mockup Sistema Gimnasio';
 heroImageDiv.appendChild(heroImg);
+
+const gymCaption = document.createElement('div');
+gymCaption.classList.add('gym-caption');
+
+const gymTitle = document.createElement('h3');
+gymTitle.textContent = 'Te presentamos GymSystem';
+
+const gymDesc = document.createElement('p');
+gymDesc.textContent = 'Nuestro software integral de gestión de gimnasios. Simplifica y automatiza el control de membresías, elevando la seguridad y modernizando las instalaciones con acceso biométrico avanzado.';
+
+const btnCotizarGym = document.createElement('a'); 
+btnCotizarGym.textContent = 'Cotizar GymSystem';
+btnCotizarGym.href = '#contacto'; 
+btnCotizarGym.classList.add('btn', 'btn-primary', 'btn-gym'); 
+
+gymCaption.appendChild(gymTitle);
+gymCaption.appendChild(gymDesc);
+gymCaption.appendChild(btnCotizarGym);
+heroImageDiv.appendChild(gymCaption);
+// ---------------------------------------------
 
 heroSection.appendChild(heroContent);
 heroSection.appendChild(heroImageDiv);
 root.appendChild(heroSection);
+
+// =========================================
+// CATÁLOGO: PRODUCTOS Y SERVICIOS
+// =========================================
+
+const catalogSection = document.createElement('section');
+catalogSection.id = 'servicios';
+catalogSection.classList.add('catalog-section');
+
+// Función reutilizable para crear carruseles
+function crearCarrusel(titulo, datos) {
+    // Título de la sección
+    const sectionTitle = document.createElement('h2');
+    sectionTitle.textContent = titulo;
+    catalogSection.appendChild(sectionTitle);
+
+    // Envoltura del carrusel
+    const wrapper = document.createElement('div');
+    wrapper.classList.add('carousel-wrapper');
+
+    // Botón Izquierdo
+    const btnLeft = document.createElement('button');
+    btnLeft.classList.add('carousel-btn', 'left');
+    btnLeft.innerHTML = '&#10094;'; // Entidad HTML para la flecha <
+
+    // Pista del carrusel (donde van las tarjetas)
+    const track = document.createElement('div');
+    track.classList.add('carousel-track');
+
+    // Botón Derecho
+    const btnRight = document.createElement('button');
+    btnRight.classList.add('carousel-btn', 'right');
+    btnRight.innerHTML = '&#10095;'; // Entidad HTML para la flecha >
+
+    // Lógica de los botones para hacer scroll
+    btnLeft.addEventListener('click', () => {
+        track.scrollBy({ left: -320, behavior: 'smooth' });
+    });
+    btnRight.addEventListener('click', () => {
+        track.scrollBy({ left: 320, behavior: 'smooth' });
+    });
+
+    // Bucle para inyectar las tarjetas
+    datos.forEach(item => {
+        const card = document.createElement('div');
+        card.classList.add('service-card');
+
+        // CONDICIONAL RÚBRICA: Diferenciar > $1000
+        if (item.price >= 15000) {
+            card.classList.add('premium');
+        }
+
+        const icon = document.createElement('img');
+        icon.src = item.icon;
+        icon.classList.add('service-icon');
+        card.appendChild(icon);
+
+        const priceContainer = document.createElement('div');
+        priceContainer.classList.add('service-price');
+        const formattedPrice = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(item.price);
+        
+        // Diferenciar visualmente si es pago mensual (SaaS) o pago único (Servicio)
+        if (item.isMonthly) {
+            priceContainer.innerHTML = `${formattedPrice} <span class="price-type">/ mes</span>`;
+        } else {
+            priceContainer.innerHTML = `+ ${formattedPrice} <span class="price-type">MXN</span>`;
+        }
+        card.appendChild(priceContainer);
+
+        if (item.price > 1000) {
+            const badge = document.createElement('span');
+            badge.classList.add('premium-badge');
+            badge.textContent = 'Destacado';
+            card.appendChild(badge);
+        }
+
+        const title = document.createElement('h3');
+        title.textContent = item.name;
+        card.appendChild(title);
+
+        const desc = document.createElement('p');
+        desc.textContent = item.description;
+        card.appendChild(desc);
+
+        track.appendChild(card);
+    });
+
+    wrapper.appendChild(btnLeft);
+    wrapper.appendChild(track);
+    wrapper.appendChild(btnRight);
+    catalogSection.appendChild(wrapper);
+}
+
+// DATOS 1: Productos SaaS (Licencias / Mensualidades)
+const productosSaaS = [
+    {
+        name: 'GymSystem: Licencia de Gestión',
+        description: 'Control de membresías, pagos y acceso biométrico para gimnasios.',
+        price: 1500,
+        isMonthly: true,
+        icon: 'https://cdn.jsdelivr.net/npm/lucide-static@0.320.0/icons/dumbbell.svg'
+    },
+    {
+        name: 'Monarca: Logística y Monitoreo',
+        description: 'Generación de rutas y monitoreo de empleados para agencias de viaje.',
+        price: 2500,
+        isMonthly: true,
+        icon: 'https://cdn.jsdelivr.net/npm/lucide-static@0.320.0/icons/map.svg'
+    },
+    {
+        name: 'FerreApp: Punto de Venta',
+        description: 'Control de ventas para vendedores via AppMovil donde puedes rastrear los pedidos y generar notas.',
+        price: 1200,
+        isMonthly: true,
+        icon: 'https://cdn.jsdelivr.net/npm/lucide-static@0.320.0/icons/hammer.svg'
+    }
+];
+
+// DATOS 2: Servicios a Medida (Pagos por proyecto)
+const serviciosMedida = [
+    {
+        name: 'Desarrollo de Apps Móviles Nativas',
+        description: 'Creación de aplicaciones para iOS y Android.',
+        price: 20000,
+        isMonthly: false,
+        icon: 'https://cdn.jsdelivr.net/npm/lucide-static@0.320.0/icons/smartphone.svg'
+    },
+    {
+        name: 'Sistemas Web con Base de Datos',
+        description: 'Plataformas web completas usando React y PostgreSQL.',
+        price: 15000,
+        isMonthly: false,
+        icon: 'https://cdn.jsdelivr.net/npm/lucide-static@0.320.0/icons/database.svg'
+    },
+    {
+        name: 'Desarrollo Web Frontend',
+        description: 'Landing pages estáticas y optimizadas.',
+        price: 2500, 
+        isMonthly: false,
+        icon: 'https://cdn.jsdelivr.net/npm/lucide-static@0.320.0/icons/layout-template.svg'
+    },
+    {
+        name: 'Aplicaciones de Escritorio',
+        description: 'Software robusto para Windows y macOS.',
+        price: 2500,
+        isMonthly: false,
+        icon: 'https://cdn.jsdelivr.net/npm/lucide-static@0.320.0/icons/monitor.svg'
+    },
+    {
+        name: 'Sistemas IoT y Seguridad',
+        description: 'Hardware y software para monitoreo o control de accesos.',
+        price: 12000,
+        isMonthly: false,
+        icon: 'https://cdn.jsdelivr.net/npm/lucide-static@0.320.0/icons/cpu.svg'
+    },
+    {
+        name: 'Diseño de Interfaces (UI/UX)',
+        description: 'Prototipado e investigación de experiencia de usuario.',
+        price: 950, 
+        isMonthly: false,
+        icon: 'https://cdn.jsdelivr.net/npm/lucide-static@0.320.0/icons/pen-tool.svg'
+    },
+    {
+        name: 'Creación de APIs RESTful',
+        description: 'Microservicios seguros con FastAPI o Node.js.',
+        price: 1300,
+        isMonthly: false,
+        icon: 'https://cdn.jsdelivr.net/npm/lucide-static@0.320.0/icons/plug-2.svg'
+    }
+];
+
+// Ejecutamos la función para crear ambos carruseles (3 + 7 = 10 elementos en total)
+crearCarrusel('Nuestros Productos (SaaS)', productosSaaS);
+crearCarrusel('Desarrollo a Medida', serviciosMedida);
+
+root.appendChild(catalogSection); // Inyectar al DOM
 
 const sectionNosotros = document.createElement('section');
 sectionNosotros.id = 'nosotros';
@@ -112,15 +309,57 @@ const stackTitle = document.createElement('h4');
 stackTitle.textContent = 'Tecnologías que dominamos:';
 techStack.appendChild(stackTitle);
 
-const techLogos = ['JavaScript', 'HTML5', 'CSS3', 'React', 'Node.js', 'MySQL', 'Git'];
+const techData = [
+    { name: 'JavaScript', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg' },
+    { name: 'HTML5', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-original.svg' },
+    { name: 'CSS3', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/css3/css3-original.svg' },
+    { name: 'React', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg' },
+    { name: 'Tailwind CSS', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tailwindcss/tailwindcss-original.svg' },
+    { name: 'Python', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg' },
+    { name: 'PostgreSQL', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postgresql/postgresql-original.svg' },
+    { name: 'Git', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/git/git-original.svg' },
+    { name: 'Dart', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/dart/dart-original.svg' },
+    { name: 'Flutter', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/flutter/flutter-original.svg' },
+    { name: 'FastAPI', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/fastapi/fastapi-original.svg' },
+    { name: 'TypeScript', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/typescript/typescript-original.svg' },
+    { name: 'Node.js', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-original.svg' },
+];
+
 const techList = document.createElement('div');
 techList.classList.add('tech-list');
-techLogos.forEach(tech => {
+// Estilos rápidos en línea para ordenar la lista principal
+techList.style.display = 'flex';
+techList.style.flexWrap = 'wrap';
+techList.style.gap = '25px';
+techList.style.marginTop = '15px';
+
+techData.forEach(tech => {
+    // Contenedor individual para cada tecnología
+    const container = document.createElement('div');
+    container.classList.add('tech-item-container');
+    // Flexbox en columna para poner el texto arriba y la imagen abajito
+    container.style.display = 'flex';
+    container.style.flexDirection = 'column';
+    container.style.alignItems = 'center';
+    container.style.gap = '8px';
+
     const span = document.createElement('span');
-    span.textContent = tech;
+    span.textContent = tech.name;
     span.classList.add('tech-item');
-    techList.appendChild(span);
+    span.style.fontWeight = '500';
+
+    const img = document.createElement('img');
+    img.src = tech.icon;
+    img.alt = `Logo de ${tech.name}`;
+    // Ajusta estos valores si quieres los logos más grandes o pequeños
+    img.style.width = '45px'; 
+    img.style.height = '45px';
+
+    container.appendChild(span);
+    container.appendChild(img); 
+    techList.appendChild(container);
 });
+
 techStack.appendChild(techList);
 
 aboutContent.appendChild(aboutTitle);
