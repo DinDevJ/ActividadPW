@@ -34,6 +34,66 @@ body {
     background-color: var(--bg-main);
 }
 
+.toggle-switch {
+  position: relative;
+  /* Reducido a la mitad */
+  width: 50px; 
+  height: 25px;
+  --light: #d8dbe0;
+  --dark: #28292c;
+}
+
+.switch-label {
+  position: absolute;
+  width: 100%;
+  height: 25px; /* Ajustado */
+  background-color: var(--dark);
+  border-radius: 25px;
+  cursor: pointer;
+  border: 2px solid var(--dark); /* Borde un poco más delgado */
+}
+
+.checkbox {
+  position: absolute;
+  display: none;
+}
+
+.slider {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 25px;
+  transition: 0.3s;
+}
+
+.checkbox:checked ~ .slider {
+  background-color: var(--light);
+}
+
+.slider::before {
+  content: "";
+  position: absolute;
+  /* Posición y tamaño del círculo reducidos */
+  top: 2.5px;
+  left: 2.5px;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  /* La sombra (luna) también debe ser más pequeña */
+  box-shadow: inset 6px -2px 0px 0px var(--light);
+  background-color: var(--dark);
+  transition: 0.3s;
+}
+
+.checkbox:checked ~ .slider::before {
+  /* El salto ahora es más corto porque el switch es más chico */
+  transform: translateX(25px); 
+  background-color: var(--dark);
+  box-shadow: none;
+}
+
+
+
 .logo {
     height: 48px;
     cursor: pointer;
@@ -51,7 +111,6 @@ body {
     color: var(--text-main);
     font-weight: 500;
     font-size: 0.95rem;
-    transition: color 0.2s;
 }
 
 .menuList a:hover {
@@ -90,6 +149,7 @@ body {
     max-width: 750px;
     margin: 0 auto 3rem;
     line-height: 1.8;
+    cursor: none;
 }
 
 .hero-buttons {
@@ -106,7 +166,6 @@ body {
     font-weight: 600;
     cursor: pointer;
     border: none;
-    transition: all 0.2s ease;
 }
 
 .btn-primary {
@@ -116,7 +175,6 @@ body {
 
 .btn-primary:hover {
     background-color: var(--color-primary-hover);
-    transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
 }
 
@@ -127,7 +185,6 @@ body {
 
 .btn-secondary:hover {
     background-color: #E5E7EB;
-    transform: translateY(-2px);
 }
 
 .hero-image img {
@@ -174,7 +231,6 @@ section>p {
     border-radius: 12px;
     padding: 2rem;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03);
-    transition: transform 0.2s, box-shadow 0.2s;
     border: 1px solid #E5E7EB;
     position: relative;
     overflow: hidden;
@@ -294,13 +350,13 @@ section>p {
     font-weight: 600;
     color: var(--text-main);
     border: 1px solid #E5E7EB;
-    transition: background-color 0.2s, border-color 0.2s;
+    user-select: none;
 }
 
 .tech-item:hover {
-    background-color: #fce7f3;
+    background-color: var(--color-primary);
     border-color: var(--color-primary);
-    color: var(--color-primary);
+    color: white;
 }
 
 .about-image {
@@ -331,7 +387,6 @@ section>p {
     border-radius: 16px;
     overflow: hidden;
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
-    transition: transform 0.2s;
 }
 
 .case-card:hover {
@@ -398,7 +453,6 @@ section>p {
     width: 100%;
     aspect-ratio: 1;
     border-radius: 8px;
-    transition: transform 0.5s;
     background-position: center;
 }
 
@@ -503,7 +557,6 @@ section>p {
     font-family: 'Inter', sans-serif;
     color: var(--text-main);
     background-color: #F9FAFB;
-    transition: all 0.2s;
 }
 
 .form-group input::placeholder,

@@ -15,6 +15,26 @@ const logo = document.createElement('img');
 logo.src = 'images/puro.png';
 logo.classList.add("logo");
 
+const divSwitch = document.createElement('div');
+divSwitch.classList.add("toggle-switch");
+
+const switchLabel = document.createElement('label');
+switchLabel.classList.add('switch-label');
+
+const switchInput = document.createElement('input');
+switchInput.type = 'checkbox';
+switchInput.classList.add('checkbox');
+switchInput.checked = true;
+
+const switchSlider = document.createElement('span');
+switchSlider.classList.add('slider');
+
+divSwitch.appendChild(switchLabel);
+switchLabel.appendChild(switchInput);
+switchLabel.appendChild(switchSlider);
+
+
+
 links.forEach(item => {
     const li = document.createElement('li');
     const a = document.createElement('a');
@@ -27,6 +47,7 @@ menuList.classList.add("menuList");
 
 navbar.appendChild(logo);
 navbar.appendChild(menuList);
+navbar.appendChild(divSwitch);
 navbar.classList.add("navbar");
 root.appendChild(navbar);
 
@@ -160,7 +181,7 @@ sectionContacto.id = 'contacto';
 sectionContacto.classList.add('contact-section');
 
 const contactTitle = document.createElement('h2');
-contactTitle.textContent = '¿Tienes un proyecto en mente? Tomemos un café virtual ☕';
+contactTitle.textContent = '¿Tienes un proyecto en mente?';
 sectionContacto.appendChild(contactTitle);
 
 const contactForm = document.createElement('form');
