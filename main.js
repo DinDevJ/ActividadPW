@@ -99,96 +99,119 @@ heroSection.appendChild(heroContent);
 heroSection.appendChild(heroImageDiv);
 root.appendChild(heroSection);
 
-// --- SECCION DE SERVICIOS ---
-let servicios = JSON.parse(localStorage.getItem('servicios'));
-if (!servicios || servicios.length === 0) {
-    servicios = [
-        { nombre: 'Página Web (HTML/CSS)', descripcion: 'Desarrollo de página web estática para portafolios o pequeños negocios.', precio: 1500, fotografia: 'https://via.placeholder.com/400x250/2563EB/FFFFFF?text=Html+Css' },
-        { nombre: 'Formateo de PC', descripcion: 'Instalación de Windows, drivers esenciales y paquetería de oficina.', precio: 300, fotografia: 'https://via.placeholder.com/400x250/00C4A7/FFFFFF?text=Formateo' },
-        { nombre: 'Mantenimiento de Laptop', descripcion: 'Limpieza interna, cambio de pasta térmica y revisión de ventiladores.', precio: 400, fotografia: 'https://via.placeholder.com/400x250/2563EB/FFFFFF?text=Laptop' },
-        { nombre: 'Instalación de Red Doméstica', descripcion: 'Mapeo, cableado y configuración de repetidores WiFi para extender señal.', precio: 600, fotografia: 'https://via.placeholder.com/400x250/F8BD24/111827?text=Redes' },
-        { nombre: 'Desarrollo de API Escolar', descripcion: 'Ayuda/asesoría en creación de APIs REST con Node.js para tareas.', precio: 1200, fotografia: 'https://via.placeholder.com/400x250/00C4A7/FFFFFF?text=API' },
-        { nombre: 'Recuperación de Archivos', descripcion: 'Extracción de documentos borrados o corrompidos de memorias USB.', precio: 500, fotografia: 'https://via.placeholder.com/400x250/2563EB/FFFFFF?text=Recuperacion' },
-        { nombre: 'Punto de Venta Básico', descripcion: 'Sistema de escritorio simple en Java para tiendas locales.', precio: 2500, fotografia: 'https://via.placeholder.com/400x250/F07167/FFFFFF?text=Punto+Venta' },
-        { nombre: 'Armado de PC Desktop', descripcion: 'Asesoría en compra de piezas y ensamblado completo paso a paso.', precio: 450, fotografia: 'https://via.placeholder.com/400x250/2563EB/FFFFFF?text=Armado+PC' },
-        { nombre: 'Limpieza de Malware', descripcion: 'Desinfección de virus del sistema operativo sin formatear.', precio: 250, fotografia: 'https://via.placeholder.com/400x250/00C4A7/FFFFFF?text=Antivirus' },
-        { nombre: 'Soporte Remoto', descripcion: 'Atención a distancia para solucionar problemas de Windows y aplicaciones.', precio: 150, fotografia: 'https://via.placeholder.com/400x250/111827/FFFFFF?text=Remoto' }
-    ];
-    localStorage.setItem('servicios', JSON.stringify(servicios));
+// =========================================
+// CATÁLOGO: PRODUCTOS Y SERVICIOS (Estilo Mercado Libre)
+// =========================================
+
+const catalogSection = document.createElement('section');
+catalogSection.id = 'servicios';
+catalogSection.classList.add('catalog-section');
+
+// Función reutilizable para crear carruseles
+function crearCarrusel(titulo, datos) {
+    const sectionTitle = document.createElement('h2');
+    sectionTitle.textContent = titulo;
+    catalogSection.appendChild(sectionTitle);
+
+    const wrapper = document.createElement('div');
+    wrapper.classList.add('carousel-wrapper');
+
+    const btnLeft = document.createElement('button');
+    btnLeft.classList.add('carousel-btn', 'left');
+    btnLeft.innerHTML = '&#10094;';
+
+    const track = document.createElement('div');
+    track.classList.add('carousel-track');
+
+    const btnRight = document.createElement('button');
+    btnRight.classList.add('carousel-btn', 'right');
+    btnRight.innerHTML = '&#10095;';
+
+    btnLeft.addEventListener('click', () => {
+        track.scrollBy({ left: -320, behavior: 'smooth' });
+    });
+    btnRight.addEventListener('click', () => {
+        track.scrollBy({ left: 320, behavior: 'smooth' });
+    });
+
+    datos.forEach(item => {
+        const card = document.createElement('div');
+        card.classList.add('service-card');
+
+        // CONDICIONAL RÚBRICA: > $1000
+        if (item.price > 1000) {
+            card.classList.add('premium');
+        }
+
+        const icon = document.createElement('img');
+        icon.src = item.icon;
+        icon.classList.add('service-icon');
+        // Pequeño fix inline para evitar que el CSS de Katia deforme los iconos SVG
+        icon.style.width = '50px';
+        icon.style.height = '50px';
+        icon.style.margin = '0 0 20px 0';
+        icon.style.objectFit = 'contain';
+        card.appendChild(icon);
+
+        const priceContainer = document.createElement('div');
+        priceContainer.classList.add('service-price');
+        const formattedPrice = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(item.price);
+
+        if (item.isMonthly) {
+            priceContainer.innerHTML = `${formattedPrice} <span class="price-type">/ mes</span>`;
+        } else {
+            priceContainer.innerHTML = `+ ${formattedPrice} <span class="price-type">MXN</span>`;
+        }
+        card.appendChild(priceContainer);
+
+        if (item.price >= 15000) {
+            const badge = document.createElement('span');
+            badge.classList.add('premium-badge');
+            badge.textContent = 'Destacado';
+            card.appendChild(badge);
+        }
+
+        const title = document.createElement('h3');
+        title.textContent = item.name;
+        card.appendChild(title);
+
+        const desc = document.createElement('p');
+        desc.textContent = item.description;
+        card.appendChild(desc);
+
+        track.appendChild(card);
+    });
+
+    wrapper.appendChild(btnLeft);
+    wrapper.appendChild(track);
+    wrapper.appendChild(btnRight);
+    catalogSection.appendChild(wrapper);
 }
 
-const sectionServicios = document.createElement('section');
-sectionServicios.id = 'servicios';
-sectionServicios.classList.add('catalog-section'); // Según el nuevo CSS
+const productosSaaS = [
+    { name: 'GymSystem: Licencia de Gestión', description: 'Control de membresías, pagos y acceso biométrico para gimnasios.', price: 1500, isMonthly: true, icon: 'https://cdn.jsdelivr.net/npm/lucide-static@0.320.0/icons/dumbbell.svg' },
+    { name: 'Monarca: Logística y Monitoreo', description: 'Generación de rutas y monitoreo de empleados para agencias.', price: 2500, isMonthly: true, icon: 'https://cdn.jsdelivr.net/npm/lucide-static@0.320.0/icons/map.svg' },
+    { name: 'FerreApp: Punto de Venta', description: 'Control de inventario, ventas y facturación para ferreterías.', price: 1200, isMonthly: true, icon: 'https://cdn.jsdelivr.net/npm/lucide-static@0.320.0/icons/hammer.svg' }
+];
 
-const serviciosTitle = document.createElement('h2');
-serviciosTitle.textContent = 'Catálogo de Servicios';
+let serviciosMedida = [
+    { name: 'Desarrollo de Apps Móviles Nativas', description: 'Creación de aplicaciones para iOS y Android.', price: 20000, isMonthly: false, icon: 'https://cdn.jsdelivr.net/npm/lucide-static@0.320.0/icons/smartphone.svg' },
+    { name: 'Sistemas Web con Base de Datos', description: 'Plataformas web completas escalables.', price: 15000, isMonthly: false, icon: 'https://cdn.jsdelivr.net/npm/lucide-static@0.320.0/icons/database.svg' },
+    { name: 'Desarrollo Web Frontend', description: 'Landing pages estáticas y optimizadas.', price: 2500, isMonthly: false, icon: 'https://cdn.jsdelivr.net/npm/lucide-static@0.320.0/icons/layout-template.svg' },
+    { name: 'Aplicaciones de Escritorio', description: 'Software robusto para Windows y macOS.', price: 5000, isMonthly: false, icon: 'https://cdn.jsdelivr.net/npm/lucide-static@0.320.0/icons/monitor.svg' },
+    { name: 'Sistemas IoT y Seguridad', description: 'Hardware y software para monitoreo o control de accesos.', price: 10000, isMonthly: false, icon: 'https://cdn.jsdelivr.net/npm/lucide-static@0.320.0/icons/cpu.svg' },
+    { name: 'Diseño de Interfaces (UI/UX)', description: 'Prototipado e investigación de experiencia de usuario.', price: 950, isMonthly: false, icon: 'https://cdn.jsdelivr.net/npm/lucide-static@0.320.0/icons/pen-tool.svg' },
+    { name: 'Creación de APIs RESTful', description: 'Microservicios seguros de alto rendimiento.', price: 1300, isMonthly: false, icon: 'https://cdn.jsdelivr.net/npm/lucide-static@0.320.0/icons/plug-2.svg' }
+];
 
-const carouselWrapper = document.createElement('div');
-carouselWrapper.classList.add('carousel-wrapper');
+// Lógica de LocalStorage fusionada (Para que los que agregues en alta.html aparezcan aquí)
+const serviciosGuardados = JSON.parse(localStorage.getItem('serviciosNuevos')) || [];
+serviciosMedida = [...serviciosMedida, ...serviciosGuardados];
 
-const btnLeft = document.createElement('button');
-btnLeft.classList.add('carousel-btn', 'left');
-btnLeft.innerHTML = '&#10094;';
+crearCarrusel('Nuestros Productos (SaaS)', productosSaaS);
+crearCarrusel('Desarrollo a Medida', serviciosMedida);
 
-const carouselTrack = document.createElement('div');
-carouselTrack.classList.add('carousel-track');
-
-servicios.forEach((servicio) => {
-    const card = document.createElement('div');
-    card.classList.add('service-card');
-
-    if (servicio.precio > 1000) {
-        card.classList.add('premium');
-    }
-
-    const img = document.createElement('img');
-    img.src = servicio.fotografia;
-    img.alt = servicio.nombre;
-
-    const catInfo = document.createElement('span');
-    catInfo.classList.add('service-category');
-    catInfo.textContent = 'Hardware / Web';
-
-    const h3 = document.createElement('h3');
-    h3.textContent = servicio.nombre;
-
-    const p = document.createElement('p');
-    p.textContent = servicio.descripcion;
-
-    const priceBox = document.createElement('div');
-    priceBox.classList.add('price-box', 'service-price');
-    priceBox.textContent = `$${servicio.precio} MXN`;
-
-    card.appendChild(img);
-    card.appendChild(catInfo);
-    card.appendChild(h3);
-    card.appendChild(p);
-    card.appendChild(priceBox);
-
-    carouselTrack.appendChild(card);
-});
-
-const btnRight = document.createElement('button');
-btnRight.classList.add('carousel-btn', 'right');
-btnRight.innerHTML = '&#10095;';
-
-carouselWrapper.appendChild(btnLeft);
-carouselWrapper.appendChild(carouselTrack);
-carouselWrapper.appendChild(btnRight);
-
-sectionServicios.appendChild(serviciosTitle);
-sectionServicios.appendChild(carouselWrapper);
-
-// Lógica de desplazamiento simple para el carrusel
-btnLeft.addEventListener('click', () => {
-    carouselTrack.scrollBy({ left: -320, behavior: 'smooth' });
-});
-btnRight.addEventListener('click', () => {
-    carouselTrack.scrollBy({ left: 320, behavior: 'smooth' });
-});
-
-root.appendChild(sectionServicios);
+root.appendChild(catalogSection);
 
 const sectionNosotros = document.createElement('section');
 sectionNosotros.id = 'nosotros';
@@ -260,7 +283,70 @@ aboutContent.appendChild(aboutDesc);
 
 sectionNosotros.appendChild(aboutContent);
 sectionNosotros.appendChild(teamContainer);
+// --- TECNOLOGÍAS QUE DOMINAMOS ---
+const techStack = document.createElement('div');
+techStack.classList.add('tech-stack');
+techStack.style.marginTop = '4rem';
+
+const stackTitle = document.createElement('h4');
+stackTitle.textContent = 'Tecnologías que dominamos:';
+stackTitle.style.textAlign = 'center';
+stackTitle.style.fontSize = '1.5rem';
+stackTitle.style.marginBottom = '2rem';
+techStack.appendChild(stackTitle);
+
+const techData = [
+    { name: 'JavaScript', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg' },
+    { name: 'TypeScript', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/typescript/typescript-original.svg' },
+    { name: 'HTML5', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-original.svg' },
+    { name: 'CSS3', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/css3/css3-original.svg' },
+    { name: 'React', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg' },
+    { name: 'Tailwind CSS', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tailwindcss/tailwindcss-original.svg' },
+    { name: 'Python', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg' },
+    { name: 'FastAPI', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/fastapi/fastapi-original.svg' },
+    { name: 'PostgreSQL', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postgresql/postgresql-original.svg' },
+    { name: 'Dart', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/dart/dart-original.svg' },
+    { name: 'Flutter', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/flutter/flutter-original.svg' },
+    { name: 'Git', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/git/git-original.svg' }
+];
+
+const techList = document.createElement('div');
+techList.classList.add('tech-list');
+techList.style.display = 'flex';
+techList.style.flexWrap = 'wrap';
+techList.style.justifyContent = 'center';
+techList.style.gap = '35px';
+
+techData.forEach(tech => {
+    const container = document.createElement('div');
+    container.style.display = 'flex';
+    container.style.flexDirection = 'column';
+    container.style.alignItems = 'center';
+    container.style.gap = '10px';
+
+    const span = document.createElement('span');
+    span.textContent = tech.name;
+    span.style.fontWeight = '600';
+    span.style.fontSize = '0.9rem';
+    span.style.color = 'var(--text-muted)';
+
+    const img = document.createElement('img');
+    img.src = tech.icon;
+    img.alt = `Logo de ${tech.name}`;
+    img.style.width = '50px';
+    img.style.height = '50px';
+
+    container.appendChild(img);
+    container.appendChild(span);
+    techList.appendChild(container);
+});
+
+techStack.appendChild(techList);
+// Agregamos techStack al contenedor de Nosotros
+aboutContent.appendChild(techStack);
 root.appendChild(sectionNosotros);
+
+
 
 const sectionUnete = document.createElement('section');
 sectionUnete.id = 'unete';
