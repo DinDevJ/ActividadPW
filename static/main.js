@@ -9,13 +9,11 @@ const menuList = document.createElement('ul');
 const links = [
     { texto: 'Inicio', url: '#' },
     { texto: 'Servicios', url: '#servicios' },
-    { texto: 'Nosotros', url: '#nosotros' },
-    { texto: 'Agregar Servicio', url: 'alta.html' },
-    { texto: 'Contacto', url: '#contacto' }
+    { texto: 'Nosotros', url: '#nosotros' }
 ];
 
 const logo = document.createElement('img');
-logo.src = 'images/puro.png';
+logo.src = '/static/images/puro.png';
 logo.classList.add("logo");
 
 const divSwitch = document.createElement('div');
@@ -75,7 +73,7 @@ const btnCotizar = document.createElement('button');
 btnCotizar.textContent = 'Cotizar proyecto';
 btnCotizar.classList.add('btn', 'btn-primary');
 btnCotizar.addEventListener('click', () => {
-    window.location.hash = '#contacto';
+    window.location.hash = '#servicios';
 });
 
 const btnPortafolio = document.createElement('button');
@@ -95,7 +93,7 @@ heroContent.appendChild(heroButtons);
 const heroImageDiv = document.createElement('div');
 heroImageDiv.classList.add('hero-image');
 const heroImg = document.createElement('img');
-heroImg.src = 'images/mockup-gymsystem.png';
+heroImg.src = '/static/images/mockup-gymsystem.png';
 heroImg.alt = 'Mockup Sistema Gimnasio';
 heroImageDiv.appendChild(heroImg);
 
@@ -111,7 +109,7 @@ gymDesc.textContent = 'Nuestro software integral de gestión de gimnasios. Simpl
 
 const btnCotizarGym = document.createElement('a');
 btnCotizarGym.textContent = 'Mas sobre GymSystem';
-btnCotizarGym.href = '#contacto';
+btnCotizarGym.href = '#servicios';
 btnCotizarGym.classList.add('btn', 'btn-primary');
 btnCotizarGym.style.marginTop = '20px';
 btnCotizarGym.style.display = 'inline-block';
@@ -145,9 +143,8 @@ let serviciosMedida = [
     { name: 'Creación de APIs RESTful', description: 'Microservicios seguros de alto rendimiento.', price: 1300, isMonthly: false, icon: 'https://cdn.jsdelivr.net/npm/lucide-static@0.320.0/icons/plug-2.svg' }
 ];
 
-// Lógica de LocalStorage fusionada (Para los que agregues en alta.html)
-const serviciosGuardados = JSON.parse(localStorage.getItem('serviciosNuevos')) || [];
-serviciosMedida = [...serviciosMedida, ...serviciosGuardados];
+// Lógica de LocalStorage fusionada removida por requerimientos
+
 
 // =========================================
 // CATÁLOGO: PRODUCTOS Y SERVICIOS
@@ -240,19 +237,11 @@ function crearCarrusel(titulo, datos) {
             btnAction.style.color = '#ffffff';
             btnAction.href = '#'; // Redirige a donde quieras después
         } else {
-            // Diseño Desarrollo a Medida (Formulario)
-            btnAction.textContent = 'Cotizar Proyecto';
+            // Diseño Desarrollo a Medida (Sin Formulario)
+            btnAction.textContent = 'Ver Detalles';
             btnAction.style.backgroundColor = '#F3F4F6';
             btnAction.style.color = 'var(--text-main)';
-            btnAction.href = '#contacto';
-
-            // Autoseleccionar en el formulario
-            btnAction.addEventListener('click', () => {
-                const selectServicio = document.getElementById('select-servicio');
-                if (selectServicio) {
-                    selectServicio.value = item.name;
-                }
-            });
+            btnAction.href = '#';
         }
 
         btnAction.addEventListener('mouseenter', () => btnAction.style.opacity = '0.8');
@@ -440,54 +429,6 @@ uneteContent.appendChild(uneteTitle);
 sectionUnete.appendChild(uneteContent);
 root.appendChild(sectionUnete);
 
-// =========================================
-// CONTACTO SECTION (CON MENÚ DESPLEGABLE)
-// =========================================
-const sectionContacto = document.createElement('section');
-sectionContacto.id = 'contacto';
-sectionContacto.classList.add('contact-section');
-
-const contactTitle = document.createElement('h2');
-contactTitle.textContent = '¿Tienes un proyecto en mente?';
-sectionContacto.appendChild(contactTitle);
-
-const contactForm = document.createElement('form');
-contactForm.classList.add('contact-form');
-
-// Generar las opciones del select dinámicamente
-let opcionesSelect = `<option value="">Selecciona un servicio a cotizar...</option>`;
-opcionesSelect += `<option value="Dudas Generales">Dudas generales / Otro proyecto</option>`;
-
-serviciosMedida.forEach(servicio => {
-    opcionesSelect += `<option value="${servicio.name}">${servicio.name}</option>`;
-});
-
-contactForm.innerHTML = `
-    <div class="form-group">
-        <select id="select-servicio" required style="width: 100%; padding: 1.2rem; border: 1px solid #D1D5DB; border-radius: 8px; font-size: 1.05rem; font-family: 'Inter', sans-serif; color: var(--text-main); background-color: #F9FAFB; appearance: none; cursor: pointer;">
-            ${opcionesSelect}
-        </select>
-    </div>
-    <div class="form-group">
-        <input type="text" placeholder="Tu Nombre o el de tu Empresa" required />
-    </div>
-    <div class="form-group">
-        <input type="email" placeholder="Tu Correo Electrónico" required />
-    </div>
-    <div class="form-group">
-        <textarea placeholder="Cuéntanos un poco de los requerimientos de tu proyecto..." rows="4" required></textarea>
-    </div>
-    <button type="submit" class="btn btn-primary" style="width: 100%;">Enviar Solicitud</button>
-`;
-
-contactForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    alert('¡Mensaje enviado con éxito! Nos pondremos en contacto pronto.');
-    contactForm.reset();
-});
-
-sectionContacto.appendChild(contactForm);
-root.appendChild(sectionContacto);
 
 // =========================================
 // FOOTER
