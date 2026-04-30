@@ -143,7 +143,8 @@ let serviciosMedida = [
     { name: 'Creación de APIs RESTful', description: 'Microservicios seguros de alto rendimiento.', price: 1300, isMonthly: false, icon: 'https://cdn.jsdelivr.net/npm/lucide-static@0.320.0/icons/plug-2.svg' }
 ];
 
-// Lógica de LocalStorage fusionada removida por requerimientos
+
+
 
 
 // =========================================
@@ -179,7 +180,6 @@ function crearCarrusel(titulo, datos) {
         const card = document.createElement('div');
         card.classList.add('service-card');
 
-        // CONDICIONAL RÚBRICA
         if (item.price > 1000) card.classList.add('premium');
 
         const icon = document.createElement('img');
