@@ -9,7 +9,8 @@ const menuList = document.createElement('ul');
 const links = [
     { texto: 'Inicio', url: '#' },
     { texto: 'Servicios', url: '#servicios' },
-    { texto: 'Nosotros', url: '#nosotros' }
+    { texto: 'Nosotros', url: '#nosotros' },
+    { texto: 'Agregar Servicio', url: '/agregar/' }
 ];
 
 const logo = document.createElement('img');
@@ -143,8 +144,9 @@ let serviciosMedida = [
     { name: 'Creación de APIs RESTful', description: 'Microservicios seguros de alto rendimiento.', price: 1300, isMonthly: false, icon: 'https://cdn.jsdelivr.net/npm/lucide-static@0.320.0/icons/plug-2.svg' }
 ];
 
-// Lógica de LocalStorage fusionada removida por requerimientos
-
+// Lógica de Sesión de Django (Actividad 2)
+const serviciosGuardados = window.djangoServicios || [];
+serviciosMedida = [...serviciosMedida, ...serviciosGuardados];
 
 // =========================================
 // CATÁLOGO: PRODUCTOS Y SERVICIOS

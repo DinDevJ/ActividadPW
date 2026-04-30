@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MOSTRAR SERVICIO BD</title>
+</head>
+<body>
+    <h1>SHOW</h1>
+    <p>SERVICIOS BD:</p>
+    <table border="1">
+        {% for servicio in lista_servicios %}
+        <tr>
+            <td>{{ servicio.nombre }}</td>
+            <td>{{ servicio.descripcion }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br><br>
+    <a href="{% url 'inicio' %}">IR A INICIO</a>
+</body>
+</html>

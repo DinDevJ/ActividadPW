@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'core',
+    'sslserver',
 ]
 
 MIDDLEWARE = [
@@ -75,8 +76,12 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'pw',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
     }
 }
 
@@ -117,3 +122,11 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
+
+# Bypass MySQL version check for older XAMPP versions
+import django.db.backends.mysql.base as mysql_base
+mysql_base.DatabaseWrapper.check_database_version_supported = lambda self: None
+
+import django.db.backends.mysql.features as mysql_features
+mysql_features.DatabaseFeatures.can_return_columns_from_insert = False
+mysql_features.DatabaseFeatures.can_return_rows_from_bulk_insert = False
