@@ -21,4 +21,5 @@ from core import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
+    path('agregar/', views.agregar_servicio, name='agregar_servicio'),
 ]

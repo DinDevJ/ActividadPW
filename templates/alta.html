@@ -1,0 +1,17 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{% static 'images/logo-trans-inv.png' %}">
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <link rel="stylesheet" href="{% static 'alta.css' %}">
+    <title>Agregar Servicio - Etéreo Software</title>
+</head>
+<body>
+    <div id="root"></div>
+    {% csrf_token %}
+    <script src="{% static 'alta.js' %}"></script>
+</body>
+</html>

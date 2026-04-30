@@ -12,6 +12,11 @@
 
 <body>
     <div id="root"></div>
+    {{ servicios_json|default:"[]"|safe|json_script:"servicios-data" }}
+    <script>
+        let dataStr = document.getElementById('servicios-data').textContent;
+        window.djangoServicios = JSON.parse(dataStr);
+    </script>
     <script src="{% static 'main.js' %}"></script>
 </body>
 

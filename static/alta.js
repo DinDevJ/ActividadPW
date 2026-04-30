@@ -2,24 +2,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const root = document.getElementById('root');
     root.innerHTML = '';
 
-    // =========================================
-    // NAVBAR SIMPLIFICADA
-    // =========================================
+    // Navbar
     const navbar = document.createElement('nav');
     navbar.classList.add('navbar');
     
-    // Logo que regresa al inicio
     const logoLink = document.createElement('a');
-    logoLink.href = 'index.html';
+    logoLink.href = '/';
     
     const logo = document.createElement('img');
-    logo.src = 'images/puro.png';
+    logo.src = '/static/images/puro.png';
     logo.classList.add('logo');
     logoLink.appendChild(logo);
     
-    // Link de regreso
     const backLink = document.createElement('a');
-    backLink.href = 'index.html';
+    backLink.href = '/';
     backLink.textContent = '← Regresar al Inicio';
     backLink.classList.add('back-link');
 
@@ -27,9 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
     navbar.appendChild(backLink);
     root.appendChild(navbar);
 
-    // =========================================
-    // CONTENEDOR CENTRAL Y FORMULARIO
-    // =========================================
+    // Formulario
     const container = document.createElement('div');
     container.classList.add('alta-container');
 
@@ -41,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const form = document.createElement('form');
     form.classList.add('alta-form');
 
-    // Función auxiliar para crear grupos de inputs
+    // Funcion para crear campos del formulario
     const createInputGroup = (labelText, inputType, id, placeholder = '') => {
         const group = document.createElement('div');
         group.classList.add('form-group');
@@ -93,10 +87,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const { group: priceGroup, input: priceInput } = createInputGroup('Precio (MXN)', 'number', 'srv-price', 'Ej. 5000');
     const { group: typeGroup, input: typeInput } = createInputGroup('Categoría y Tipo de Cobro', 'select-bool', 'srv-type');
     
-    // Campo de Ícono (URL)
+    // Icono
     const { group: iconGroup, input: iconInput } = createInputGroup('URL de la Imagen / Ícono (Opcional)', 'url', 'srv-icon', 'Ej. https://ejemplo.com/icono.png');
 
-    // Contenedor global para errores y requerimientos de Actividad 2
+    // Contenedor de errores
     const errorContainer = document.createElement('div');
     errorContainer.id = 'error-container';
     errorContainer.classList.add('error-container');
@@ -114,17 +108,15 @@ document.addEventListener('DOMContentLoaded', () => {
     form.appendChild(priceGroup);
     form.appendChild(typeGroup);
     form.appendChild(iconGroup);
-    form.appendChild(errorContainer); // Visualización de errores y sugerencia
+    form.appendChild(errorContainer);
     form.appendChild(submitBtn);
     
     container.appendChild(form);
     root.appendChild(container);
 
-    // =========================================
-    // VALIDACIÓN Y GUARDADO DE DATOS (Actividad 2)
-    // =========================================
+    // Validacion y guardado
     form.addEventListener('submit', (e) => {
-        e.preventDefault(); // Evitamos recarga de página convencional
+        e.preventDefault();
         
         // Limpiamos los estados de error anteriores
         errorContainer.style.display = 'none';
@@ -177,13 +169,13 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             errorContainer.appendChild(ul);
             
-            // Alternativa y Sugerencia de Corrección
+            // Sugerencia de corrección
             const suggestion = document.createElement('p');
             suggestion.textContent = 'Sugerencia: Revisa los recuadros marcados en rojo. Asegúrate de rellenar todo el texto y poner un precio numérico positivo sin comas extra.';
             suggestion.classList.add('error-suggestion');
             errorContainer.appendChild(suggestion);
             
-            // Scroll suave hacia los errores para mejor UX
+            // Scroll suave hacia los errores
             container.scrollIntoView({ behavior: 'smooth' });
             return;
         }
@@ -197,21 +189,28 @@ document.addEventListener('DOMContentLoaded', () => {
             icon: iconVal ? iconVal : 'https://cdn.jsdelivr.net/npm/lucide-static@0.320.0/icons/image.svg'
         };
         
-        // Manejo de LocalStorage (Conversión de Objetos)
-        // 1. Obtener la lista de servicios existente o una vacía
-        let serviciosGuardados = [];
-        const savedData = localStorage.getItem('serviciosNuevos');
-        if (savedData) {
-            serviciosGuardados = JSON.parse(savedData);
+        // Obtener token CSRF
+        const csrfEl = document.querySelector('[name=csrfmiddlewaretoken]');
+        if (!csrfEl) {
+            alert('Error: No se encontró el token de seguridad CSRF.');
+            return;
         }
         
-        // 2. Agregar el nuevo producto
-        serviciosGuardados.push(nuevoServicio);
-        
-        // 3. Convertir de nuevo a String y almacenar
-        localStorage.setItem('serviciosNuevos', JSON.stringify(serviciosGuardados));
-        
-        // Regresar a página de servicios para ver reflejado nuevo objeto
-        window.location.href = 'index.html#servicios';
+        fetch('/agregar/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfEl.value
+            },
+            body: JSON.stringify(nuevoServicio)
+        }).then(response => {
+            if (response.ok) {
+                window.location.href = '/#servicios';
+            } else {
+                alert('Hubo un error al guardar en la sesión del servidor.');
+            }
+        }).catch(err => {
+            alert('Error de conexión: ' + err.message);
+        });
     });
 });
